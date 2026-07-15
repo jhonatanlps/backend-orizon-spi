@@ -9,7 +9,7 @@ public class Epi {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_epi;
     @Column(nullable = false)
-    private String name;
+    private String nome;
     @Column(nullable = true)
     private String descricao;
 
@@ -17,7 +17,7 @@ public class Epi {
     }
 
     public Epi(String name, String descricao) {
-        this.name = name;
+        this.nome = nome;
         this.descricao = descricao;
     }
 
@@ -25,12 +25,12 @@ public class Epi {
         return id_epi;
     }
 
-    public String getName() {
-        return name;
+    public String getNome() {
+        return nome;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNome(String name) {
+        this.nome = name;
     }
 
     public String getDescricao() {

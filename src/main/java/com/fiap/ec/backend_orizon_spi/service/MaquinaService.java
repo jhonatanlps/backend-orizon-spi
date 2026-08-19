@@ -2,9 +2,11 @@ package com.fiap.ec.backend_orizon_spi.service;
 
 import com.fiap.ec.backend_orizon_spi.model.Maquina;
 import com.fiap.ec.backend_orizon_spi.repository.MaquinaRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class MaquinaService {
     private final MaquinaRepository repository;
 

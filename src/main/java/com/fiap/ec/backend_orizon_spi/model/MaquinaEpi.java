@@ -1,13 +1,14 @@
 package com.fiap.ec.backend_orizon_spi.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "maquina_epi")
 public class MaquinaEpi {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne
     @JoinColumn(name = "maquina_id")
     private Maquina maquina;
@@ -18,9 +19,14 @@ public class MaquinaEpi {
     public MaquinaEpi() {
     }
 
-    public MaquinaEpi(Maquina maquina, Epi epi) {
+    public MaquinaEpi(Long id, Maquina maquina, Epi epi) {
+        this.id = id;
         this.maquina = maquina;
         this.epi = epi;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Maquina getMaquina() {

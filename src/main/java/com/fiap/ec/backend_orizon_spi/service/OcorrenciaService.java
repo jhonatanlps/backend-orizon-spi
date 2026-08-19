@@ -2,9 +2,11 @@ package com.fiap.ec.backend_orizon_spi.service;
 
 import com.fiap.ec.backend_orizon_spi.model.Ocorrencia;
 import com.fiap.ec.backend_orizon_spi.repository.OcorrenciaRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class OcorrenciaService {
     private final OcorrenciaRepository repository;
 

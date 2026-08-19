@@ -2,9 +2,11 @@ package com.fiap.ec.backend_orizon_spi.service;
 
 import com.fiap.ec.backend_orizon_spi.model.Usuario;
 import com.fiap.ec.backend_orizon_spi.repository.UsuarioRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class UsuarioService{
     private final UsuarioRepository repository;
 

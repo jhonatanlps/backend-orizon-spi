@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Alerta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_usuario;
+    private Long id_alerta;
     @Column(nullable = false)
     private String mensagem;
     private String status;
@@ -17,17 +17,19 @@ public class Alerta {
     private Ocorrencia ocorrencia;
 
     public Alerta() {
+
     }
 
-    public Alerta(String mensagem, String status, String data_hora, Ocorrencia ocorrencia) {
+    public Alerta(Long id_alerta, String mensagem, String status, String data_hora, Ocorrencia ocorrencia) {
+        this.id_alerta = id_alerta;
         this.mensagem = mensagem;
         this.status = status;
         this.data_hora = data_hora;
         this.ocorrencia = ocorrencia;
     }
 
-    public Long getId_usuario() {
-        return id_usuario;
+    public Long getId_alerta() {
+        return id_alerta;
     }
 
     public String getMensagem() {

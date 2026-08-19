@@ -2,9 +2,11 @@ package com.fiap.ec.backend_orizon_spi.service;
 
 import com.fiap.ec.backend_orizon_spi.model.Funcionario;
 import com.fiap.ec.backend_orizon_spi.repository.FuncionarioRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class FuncionarioService {
     private final FuncionarioRepository repository;
 

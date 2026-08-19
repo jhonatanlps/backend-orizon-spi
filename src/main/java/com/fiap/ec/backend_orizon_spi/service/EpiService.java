@@ -2,9 +2,11 @@ package com.fiap.ec.backend_orizon_spi.service;
 
 import com.fiap.ec.backend_orizon_spi.model.Epi;
 import com.fiap.ec.backend_orizon_spi.repository.EpiRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class EpiService {
     private final EpiRepository repository;
 

@@ -16,7 +16,8 @@ public class Epi {
     public Epi() {
     }
 
-    public Epi(String name, String descricao) {
+    public Epi(Long id_epi, String nome, String descricao) {
+        this.id_epi = id_epi;
         this.nome = nome;
         this.descricao = descricao;
     }

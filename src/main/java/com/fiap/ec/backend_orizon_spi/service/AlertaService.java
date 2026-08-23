@@ -1,6 +1,7 @@
 package com.fiap.ec.backend_orizon_spi.service;
 
 import com.fiap.ec.backend_orizon_spi.model.Alerta;
+import com.fiap.ec.backend_orizon_spi.model.Ocorrencia;
 import com.fiap.ec.backend_orizon_spi.repository.AlertaRepository;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -13,19 +14,27 @@ public class AlertaService {
 
     private final SimpMessagingTemplate messagingTemplate;
 
-    public AlertaService(AlertaRepository repository, SimpMessagingTemplate messagingTemplate) {
+    private final OcorrenciaService ocorrenciaService;
+
+    public AlertaService(AlertaRepository repository, SimpMessagingTemplate messagingTemplate, OcorrenciaService ocorrenciaService) {
         this.repository = repository;
         this.messagingTemplate = messagingTemplate;
+        this.ocorrenciaService = ocorrenciaService;
     }
 
     public Alerta salvar(Alerta alerta){
-        Alerta salvo = repository.save(alerta);
 
-        Alerta alertaCompleto = buscarPorId(salvo.getId_alerta());
+        Long idOcorrencia = alerta.getOcorrencia().getId_ocorrencia();
+
+        Ocorrencia ocorrencia = ocorrenciaService.buscarPorId(idOcorrencia);
+
+        alerta.setOcorrencia(ocorrencia);
+
+        Alerta salvo = repository.save(alerta);
 
         messagingTemplate.convertAndSend(
                 "/topic/alerta",
-                alertaCompleto
+                salvo
         );
 
         return salvo;

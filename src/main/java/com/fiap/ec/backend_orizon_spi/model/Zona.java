@@ -1,0 +1,69 @@
+package com.fiap.ec.backend_orizon_spi.model;
+
+import jakarta.persistence.*;
+
+import java.util.List;
+
+@Entity
+@Table(name = "zona")
+public class Zona {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id_zona;
+    @Column(nullable = false)
+    private String nome;
+    @ElementCollection
+    private List<Integer> poligonos;
+    @ManyToOne
+    @JoinColumn(name = "maquina_id")
+    private Maquina maquina;
+    @OneToMany(mappedBy = "zona", cascade = CascadeType.ALL)
+    private List<ZonaEpi> epi;
+
+    public Zona() {
+    }
+
+    public Zona(Long id_zona, String nome, List<Integer> poligonos, Maquina maquina, List<ZonaEpi> epi) {
+        this.id_zona = id_zona;
+        this.nome = nome;
+        this.poligonos = poligonos;
+        this.maquina = maquina;
+        this.epi = epi;
+    }
+
+    public Long getId_zona() {
+        return id_zona;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public List<Integer> getPoligonos() {
+        return poligonos;
+    }
+
+    public void setPoligonos(List<Integer> poligonos) {
+        this.poligonos = poligonos;
+    }
+
+    public Maquina getMaquina() {
+        return maquina;
+    }
+
+    public void setMaquina(Maquina maquina) {
+        this.maquina = maquina;
+    }
+
+    public List<ZonaEpi> getEpi() {
+        return epi;
+    }
+
+    public void setEpi(List<ZonaEpi> epi) {
+        this.epi = epi;
+    }
+}

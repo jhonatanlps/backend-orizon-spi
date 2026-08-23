@@ -1,27 +1,29 @@
 package com.fiap.ec.backend_orizon_spi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "ocorrencia_epi")
-public class OcorrenciaEpi {
+@Table(name = "zona_epi")
+public class ZonaEpi {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "ocorrencia_id")
-    private Ocorrencia ocorrencia;
+    @JoinColumn(name = "zona_id")
+    @JsonIgnore
+    private Zona zona;
     @ManyToOne
     @JoinColumn(name = "epi_id")
     private Epi epi;
 
-    public OcorrenciaEpi() {
+    public ZonaEpi() {
     }
 
-    public OcorrenciaEpi(Long id, Ocorrencia ocorrencia, Epi epi) {
+    public ZonaEpi(Long id, Zona zona, Epi epi) {
         this.id = id;
-        this.ocorrencia = ocorrencia;
+        this.zona = zona;
         this.epi = epi;
     }
 
@@ -29,12 +31,12 @@ public class OcorrenciaEpi {
         return id;
     }
 
-    public Ocorrencia getOcorrencia() {
-        return ocorrencia;
+    public Zona getZona() {
+        return zona;
     }
 
-    public void setOcorrencia(Ocorrencia ocorrencia) {
-        this.ocorrencia = ocorrencia;
+    public void setZona(Zona zona) {
+        this.zona = zona;
     }
 
     public Epi getEpi() {

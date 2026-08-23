@@ -14,8 +14,8 @@ public class Ocorrencia {
     private LocalDateTime data_hora;
     private String status;
     @ManyToOne
-    @JoinColumn(name = "maquina_id")
-    private Maquina maquina;
+    @JoinColumn(name = "zona_id")
+    private Zona zona;
     @ManyToOne
     @JoinColumn(name = "funcionario_id")
     private Funcionario funcionario;
@@ -23,10 +23,11 @@ public class Ocorrencia {
     public Ocorrencia() {
     }
 
-    public Ocorrencia(LocalDateTime data_hora, String status, Maquina maquina, Funcionario funcionario) {
+    public Ocorrencia(Long id_ocorrencia, LocalDateTime data_hora, String status, Zona zona, Funcionario funcionario) {
+        this.id_ocorrencia = id_ocorrencia;
         this.data_hora = data_hora;
         this.status = status;
-        this.maquina = maquina;
+        this.zona = zona;
         this.funcionario = funcionario;
     }
 
@@ -50,12 +51,12 @@ public class Ocorrencia {
         this.status = status;
     }
 
-    public Maquina getMaquina() {
-        return maquina;
+    public Zona getZona() {
+        return zona;
     }
 
-    public void setMaquina(Maquina maquina) {
-        this.maquina = maquina;
+    public void setZona(Zona zona) {
+        this.zona = zona;
     }
 
     public Funcionario getFuncionario() {

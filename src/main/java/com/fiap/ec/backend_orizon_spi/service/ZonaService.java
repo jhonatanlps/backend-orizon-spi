@@ -5,6 +5,7 @@ import com.fiap.ec.backend_orizon_spi.model.Maquina;
 import com.fiap.ec.backend_orizon_spi.model.Zona;
 import com.fiap.ec.backend_orizon_spi.model.ZonaEpi;
 import com.fiap.ec.backend_orizon_spi.repository.ZonaRepository;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,10 +18,13 @@ public class ZonaService {
 
     private final EpiService epiService;
 
-    public ZonaService(ZonaRepository repository, MaquinaService maquinaService, EpiService epiService) {
+    private final SimpMessagingTemplate messagingTemplate;
+
+    public ZonaService(ZonaRepository repository, MaquinaService maquinaService, EpiService epiService, SimpMessagingTemplate messagingTemplate) {
         this.repository = repository;
         this.maquinaService = maquinaService;
         this.epiService = epiService;
+        this.messagingTemplate = messagingTemplate;
     }
 
     public Zona salvar(Zona zona){
@@ -40,7 +44,14 @@ public class ZonaService {
 
         zona.setMaquina(maquina);
 
-        return repository.save(zona);
+        Zona salvo = repository.save(zona);
+
+        messagingTemplate.convertAndSend(
+                "/topic/zona",
+                salvo
+        );
+
+        return salvo;
     }
 
     public List<Zona> listar(){

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/maquina")
+@RequestMapping("/api/maquina")
 @CrossOrigin
 public class MaquinaController {
     private final MaquinaService service;

@@ -2,6 +2,7 @@ package com.fiap.ec.backend_orizon_spi.service;
 
 import com.fiap.ec.backend_orizon_spi.model.Epi;
 import com.fiap.ec.backend_orizon_spi.repository.EpiRepository;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,12 +11,22 @@ import java.util.List;
 public class EpiService {
     private final EpiRepository repository;
 
-    public EpiService(EpiRepository repository) {
+    private final SimpMessagingTemplate messagingTemplate;
+
+    public EpiService(EpiRepository repository, SimpMessagingTemplate messagingTemplate) {
         this.repository = repository;
+        this.messagingTemplate = messagingTemplate;
     }
 
     public Epi salvar(Epi epi){
-        return repository.save(epi);
+        Epi salvo = repository.save(epi);
+
+        messagingTemplate.convertAndSend(
+                "/topic/epi",
+                salvo
+        );
+
+        return salvo;
     }
 
     public List<Epi> listar(){

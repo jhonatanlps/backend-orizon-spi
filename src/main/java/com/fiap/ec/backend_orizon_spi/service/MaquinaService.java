@@ -2,6 +2,7 @@ package com.fiap.ec.backend_orizon_spi.service;
 
 import com.fiap.ec.backend_orizon_spi.model.Maquina;
 import com.fiap.ec.backend_orizon_spi.repository.MaquinaRepository;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,12 +11,22 @@ import java.util.List;
 public class MaquinaService {
     private final MaquinaRepository repository;
 
-    public MaquinaService(MaquinaRepository repository) {
+    private final SimpMessagingTemplate messagingTemplate;
+
+    public MaquinaService(MaquinaRepository repository, SimpMessagingTemplate messagingTemplate) {
         this.repository = repository;
+        this.messagingTemplate = messagingTemplate;
     }
 
     public Maquina salvar(Maquina maquina){
-        return repository.save(maquina);
+        Maquina salvo = repository.save(maquina);
+
+        messagingTemplate.convertAndSend(
+                "/topic/maquina",
+                salvo
+        );
+
+        return salvo;
     }
 
     public List<Maquina> listar(){

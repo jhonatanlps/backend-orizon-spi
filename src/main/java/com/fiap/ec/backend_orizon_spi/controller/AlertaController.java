@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/alerta")
+@RequestMapping("/api/alerta")
 @CrossOrigin
 public class AlertaController {
     private final AlertaService service;
@@ -32,8 +32,8 @@ public class AlertaController {
     }
 
     @PutMapping("/{id}")
-    public Alerta atualizar(@PathVariable Long id, @RequestBody Alerta alerta){
-        return service.atualizar(id, alerta);
+    public Alerta resolverAlerta(@PathVariable Long id){
+        return service.resolverAlerta(id);
     }
 
     @DeleteMapping("/{id}")

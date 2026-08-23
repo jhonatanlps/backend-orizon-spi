@@ -2,6 +2,7 @@ package com.fiap.ec.backend_orizon_spi.service;
 
 import com.fiap.ec.backend_orizon_spi.model.Alerta;
 import com.fiap.ec.backend_orizon_spi.repository.AlertaRepository;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,12 +11,24 @@ import java.util.List;
 public class AlertaService {
     private final AlertaRepository repository;
 
-    public AlertaService(AlertaRepository repository) {
+    private final SimpMessagingTemplate messagingTemplate;
+
+    public AlertaService(AlertaRepository repository, SimpMessagingTemplate messagingTemplate) {
         this.repository = repository;
+        this.messagingTemplate = messagingTemplate;
     }
 
     public Alerta salvar(Alerta alerta){
-        return repository.save(alerta);
+        Alerta salvo = repository.save(alerta);
+
+        Alerta alertaCompleto = buscarPorId(salvo.getId_alerta());
+
+        messagingTemplate.convertAndSend(
+                "/topic/alerta",
+                alertaCompleto
+        );
+
+        return salvo;
     }
 
     public List<Alerta> listar(){
@@ -27,14 +40,18 @@ public class AlertaService {
                 .orElseThrow(() -> new RuntimeException("Alerta não encontrado"));
     }
 
-    public Alerta atualizar(Long id, Alerta alertaAtualizado){
+    public Alerta resolverAlerta(Long id){
         Alerta alertaExistente = buscarPorId(id);
-        alertaExistente.setData_hora(alertaAtualizado.getData_hora());
-        alertaExistente.setMensagem(alertaAtualizado.getMensagem());
-        alertaExistente.setOcorrencia(alertaAtualizado.getOcorrencia());
-        alertaExistente.setStatus(alertaAtualizado.getStatus());
+        alertaExistente.setStatus("Resolvido");
 
-        return repository.save(alertaExistente);
+        Alerta atualizado = repository.save(alertaExistente);
+
+        messagingTemplate.convertAndSend(
+                "/topic/alerta",
+                atualizado
+        );
+
+        return atualizado;
     }
 
     public void deletar(Long id){

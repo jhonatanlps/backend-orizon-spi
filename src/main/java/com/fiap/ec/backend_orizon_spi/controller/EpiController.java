@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/epi")
+@RequestMapping("/api/epi")
 @CrossOrigin
 public class EpiController {
     private final EpiService service;

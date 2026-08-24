@@ -5,9 +5,10 @@ import com.fiap.ec.backend_orizon_spi.service.OcorrenciaService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/ocorrencia")
+@RequestMapping("/api/ocorrencia")
 @CrossOrigin
 public class OcorrenciaController {
     private final OcorrenciaService service;
@@ -29,6 +30,16 @@ public class OcorrenciaController {
     @GetMapping("/{id}")
     public Ocorrencia buscarPorId(@PathVariable Long id){
         return service.buscarPorId(id);
+    }
+
+    @GetMapping("/quantidade-status")
+    public List<Map<String, Object>> qtdOcorrenciasPorStatus(){
+        return service.qtdOcorrenciasPorStatus();
+    }
+
+    @GetMapping("/quantidade-zonas")
+    public List<Map<String, Object>> qtdConformidadePorZonas(){
+        return service.qtdConformidadePorZonas();
     }
 
     @PutMapping("/{id}")

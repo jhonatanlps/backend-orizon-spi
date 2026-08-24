@@ -4,20 +4,27 @@ import com.fiap.ec.backend_orizon_spi.model.Funcionario;
 import com.fiap.ec.backend_orizon_spi.model.Ocorrencia;
 import com.fiap.ec.backend_orizon_spi.model.Zona;
 import com.fiap.ec.backend_orizon_spi.repository.OcorrenciaRepository;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class OcorrenciaService {
     private final OcorrenciaRepository repository;
 
+    private final SimpMessagingTemplate messagingTemplate;
+
     private final ZonaService zonaService;
 
     private final FuncionarioService funcionarioService;
 
-    public OcorrenciaService(OcorrenciaRepository repository, ZonaService zonaService, FuncionarioService funcionarioService) {
+    public OcorrenciaService(OcorrenciaRepository repository, SimpMessagingTemplate messagingTemplate, ZonaService zonaService, FuncionarioService funcionarioService) {
         this.repository = repository;
+        this.messagingTemplate = messagingTemplate;
         this.zonaService = zonaService;
         this.funcionarioService = funcionarioService;
     }
@@ -33,7 +40,23 @@ public class OcorrenciaService {
         ocorrencia.setZona(zona);
         ocorrencia.setFuncionario(funcionario);
 
-        return repository.save(ocorrencia);
+        Ocorrencia salvo = repository.save(ocorrencia);
+
+        List<Map<String, Object>> qtdStatus = qtdOcorrenciasPorStatus();
+
+        messagingTemplate.convertAndSend(
+                "/topic/ocorrencia/quantidade-status",
+                qtdStatus
+        );
+
+        List<Map<String, Object>> qtdZonas = qtdConformidadePorZonas();
+
+        messagingTemplate.convertAndSend(
+                "/topic/ocorrencia/quantidade-zonas",
+                qtdZonas
+        );
+
+        return salvo;
     }
 
     public List<Ocorrencia> listar(){
@@ -43,6 +66,40 @@ public class OcorrenciaService {
     public Ocorrencia buscarPorId(Long id){
         return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ocorrencia não encontrada"));
+    }
+
+    public List<Map<String, Object>> qtdOcorrenciasPorStatus(){
+        List<Object[]> resultados = repository.contarPorStatus();
+
+        List<Map<String, Object>> resposta = new ArrayList<>();
+
+        for (Object[] resultado : resultados){
+            Map<String, Object> item = new HashMap<>();
+
+            item.put("status", resultado[0]);
+            item.put("quantidade", resultado[1]);
+
+            resposta.add(item);
+        }
+
+        return resposta;
+    }
+
+    public List<Map<String, Object>> qtdConformidadePorZonas(){
+        List<Object[]> resultados = repository.contarConformidadePorZonas();
+
+        List<Map<String, Object>> resposta = new ArrayList<>();
+
+        for (Object[] resultado : resultados){
+            Map<String, Object> item = new HashMap<>();
+
+            item.put("zona", resultado[0]);
+            item.put("quantidade", resultado[1]);
+
+            resposta.add(item);
+        }
+
+        return resposta;
     }
 
     public Ocorrencia atualizar(Long id, Ocorrencia ocorrenciaAtualizado){

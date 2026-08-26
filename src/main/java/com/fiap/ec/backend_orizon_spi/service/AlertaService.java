@@ -6,6 +6,8 @@ import com.fiap.ec.backend_orizon_spi.repository.AlertaRepository;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -30,7 +32,17 @@ public class AlertaService {
 
         alerta.setOcorrencia(ocorrencia);
 
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String data = alerta.getData_hora().format(formato);
+        alerta.setData_hora(LocalDateTime.parse(data, formato));
+
         Alerta salvo = repository.save(alerta);
+
+        messagingTemplate.convertAndSend(
+                "/topic/alerta/alertas-dia",
+                salvo
+        );
 
         messagingTemplate.convertAndSend(
                 "/topic/alerta",
@@ -42,6 +54,10 @@ public class AlertaService {
 
     public List<Alerta> listar(){
         return repository.findAll();
+    }
+
+    public List<Alerta> alertasDoDia(){
+        return repository.alertasDoDia();
     }
 
     public Alerta buscarPorId(Long id){

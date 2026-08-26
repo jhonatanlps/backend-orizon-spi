@@ -7,6 +7,8 @@ import com.fiap.ec.backend_orizon_spi.repository.OcorrenciaRepository;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +42,16 @@ public class OcorrenciaService {
         ocorrencia.setZona(zona);
         ocorrencia.setFuncionario(funcionario);
 
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        String data = ocorrencia.getData_hora().format(formato);
+        ocorrencia.setData_hora(LocalDateTime.parse(data, formato));
+
         Ocorrencia salvo = repository.save(ocorrencia);
+
+        messagingTemplate.convertAndSend(
+                "/topic/ocorrencia",
+                salvo
+        );
 
         List<Map<String, Object>> qtdStatus = qtdOcorrenciasPorStatus();
 
@@ -104,7 +115,11 @@ public class OcorrenciaService {
 
     public Ocorrencia atualizar(Long id, Ocorrencia ocorrenciaAtualizado){
         Ocorrencia ocorrenciaExistente = buscarPorId(id);
-        ocorrenciaExistente.setData_hora(ocorrenciaAtualizado.getData_hora());
+
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        String data = ocorrenciaAtualizado.getData_hora().format(formato);
+
+        ocorrenciaExistente.setData_hora(LocalDateTime.parse(data));
         ocorrenciaExistente.setFuncionario(ocorrenciaAtualizado.getFuncionario());
         ocorrenciaExistente.setStatus(ocorrenciaAtualizado.getStatus());
         ocorrenciaExistente.setZona(ocorrenciaAtualizado.getZona());

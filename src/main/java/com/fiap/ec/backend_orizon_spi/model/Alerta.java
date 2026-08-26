@@ -2,6 +2,8 @@ package com.fiap.ec.backend_orizon_spi.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "alerta")
 public class Alerta {
@@ -11,7 +13,7 @@ public class Alerta {
     @Column(nullable = false)
     private String mensagem;
     private String status;
-    private String data_hora;
+    private LocalDateTime data_hora;
     @ManyToOne
     @JoinColumn(name = "ocorrencia_id")
     private Ocorrencia ocorrencia;
@@ -20,8 +22,7 @@ public class Alerta {
 
     }
 
-    public Alerta(Long id_alerta, String mensagem, String status, String data_hora, Ocorrencia ocorrencia) {
-        this.id_alerta = id_alerta;
+    public Alerta(String mensagem, String status, LocalDateTime data_hora, Ocorrencia ocorrencia) {
         this.mensagem = mensagem;
         this.status = status;
         this.data_hora = data_hora;
@@ -48,11 +49,11 @@ public class Alerta {
         this.status = status;
     }
 
-    public String getData_hora() {
+    public LocalDateTime getData_hora() {
         return data_hora;
     }
 
-    public void setData_hora(String data_hora) {
+    public void setData_hora(LocalDateTime data_hora) {
         this.data_hora = data_hora;
     }
 

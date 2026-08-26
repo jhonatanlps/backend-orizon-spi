@@ -13,7 +13,7 @@ public class Zona {
     @Column(nullable = false)
     private String nome;
     @ElementCollection
-    private List<Integer> poligonos;
+    private List<Ponto> poligonos;
     @ManyToOne
     @JoinColumn(name = "maquina_id")
     private Maquina maquina;
@@ -23,8 +23,7 @@ public class Zona {
     public Zona() {
     }
 
-    public Zona(Long id_zona, String nome, List<Integer> poligonos, Maquina maquina, List<ZonaEpi> epi) {
-        this.id_zona = id_zona;
+    public Zona(String nome, List<Ponto> poligonos, Maquina maquina, List<ZonaEpi> epi) {
         this.nome = nome;
         this.poligonos = poligonos;
         this.maquina = maquina;
@@ -43,11 +42,11 @@ public class Zona {
         this.nome = nome;
     }
 
-    public List<Integer> getPoligonos() {
+    public List<Ponto> getPoligonos() {
         return poligonos;
     }
 
-    public void setPoligonos(List<Integer> poligonos) {
+    public void setPoligonos(List<Ponto> poligonos) {
         this.poligonos = poligonos;
     }
 

@@ -26,6 +26,11 @@ public class AlertaController {
         return service.listar();
     }
 
+    @GetMapping("/alertas-dia")
+    public List<Alerta> alertasDoDia(){
+        return service.alertasDoDia();
+    }
+
     @GetMapping("/{id}")
     public Alerta buscarPorId(@PathVariable Long id){
         return service.buscarPorId(id);

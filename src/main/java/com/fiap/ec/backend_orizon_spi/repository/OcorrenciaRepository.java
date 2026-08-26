@@ -11,6 +11,7 @@ public interface OcorrenciaRepository extends JpaRepository<Ocorrencia, Long> {
     @Query("""
             SELECT o.status, COUNT(*)
             FROM Ocorrencia o
+            WHERE FORMATDATETIME(o.data_hora, 'yyyy-MM-dd') = FORMATDATETIME(CURRENT_DATE, 'yyyy-MM-dd')
             GROUP BY o.status
             """) List<Object[]> contarPorStatus();
 
@@ -18,7 +19,7 @@ public interface OcorrenciaRepository extends JpaRepository<Ocorrencia, Long> {
             SELECT z.nome, COUNT(*)
             FROM Ocorrencia o
             JOIN o.zona z
-            WHERE o.status LIKE 'OK'
+            WHERE o.status LIKE 'OK' AND FORMATDATETIME(o.data_hora, 'yyyy-MM-dd') = FORMATDATETIME(CURRENT_DATE, 'yyyy-MM-dd')
             GROUP BY z.nome
             """) List<Object[]> contarConformidadePorZonas();
 }

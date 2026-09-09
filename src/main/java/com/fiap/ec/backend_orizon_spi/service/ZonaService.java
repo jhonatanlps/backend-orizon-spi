@@ -68,6 +68,7 @@ public class ZonaService {
         zonaExistente.setNome(zonaAtualizada.getNome());
         zonaExistente.setMaquina(zonaAtualizada.getMaquina());
         zonaExistente.setPoligonos(zonaAtualizada.getPoligonos());
+        zonaExistente.setCamera(zonaAtualizada.getCamera());
         for (ZonaEpi zonaEpi : zonaAtualizada.getEpi()){
             Long epiId = zonaEpi.getEpi().getId_epi();
 

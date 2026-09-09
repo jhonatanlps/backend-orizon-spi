@@ -15,6 +15,9 @@ public class Zona {
     @ElementCollection
     private List<Ponto> poligonos;
     @ManyToOne
+    @JoinColumn(name = "camera_id")
+    private Camera camera;
+    @ManyToOne
     @JoinColumn(name = "maquina_id")
     private Maquina maquina;
     @OneToMany(mappedBy = "zona", cascade = CascadeType.ALL)
@@ -23,9 +26,10 @@ public class Zona {
     public Zona() {
     }
 
-    public Zona(String nome, List<Ponto> poligonos, Maquina maquina, List<ZonaEpi> epi) {
+    public Zona(String nome, List<Ponto> poligonos, Camera camera, Maquina maquina, List<ZonaEpi> epi) {
         this.nome = nome;
         this.poligonos = poligonos;
+        this.camera = camera;
         this.maquina = maquina;
         this.epi = epi;
     }
@@ -40,6 +44,14 @@ public class Zona {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public Camera getCamera() {
+        return camera;
+    }
+
+    public void setCamera(Camera camera) {
+        this.camera = camera;
     }
 
     public List<Ponto> getPoligonos() {

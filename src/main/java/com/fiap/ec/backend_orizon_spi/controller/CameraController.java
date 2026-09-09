@@ -2,6 +2,7 @@ package com.fiap.ec.backend_orizon_spi.controller;
 
 import com.fiap.ec.backend_orizon_spi.model.Camera;
 import com.fiap.ec.backend_orizon_spi.service.CameraService;
+import com.fiap.ec.backend_orizon_spi.service.CameraStreamService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,13 +12,16 @@ import java.util.List;
 @CrossOrigin
 public class CameraController {
     private CameraService cameraService;
+    private CameraStreamService cameraStreamService;
 
-    public CameraController(CameraService cameraService) {
+    public CameraController(CameraService cameraService, CameraStreamService cameraStreamService) {
         this.cameraService = cameraService;
+        this.cameraStreamService = cameraStreamService;
     }
 
     @PostMapping
     public Camera criar(@RequestBody Camera camera){
+        cameraStreamService.registerAndStartNewCamera(camera);
         return cameraService.salvar(camera);
     }
 

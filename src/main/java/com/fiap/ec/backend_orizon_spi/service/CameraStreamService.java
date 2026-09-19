@@ -25,35 +25,41 @@ public class CameraStreamService {
 
     @PostConstruct
     public void initAllStreams() {
-        File dir = new File(baseDir);
-        if (!dir.exists()) dir.mkdirs();
-
-        // Busca direto do banco H2
         List<Camera> cameras = cameraRepository.findAll();
+        System.out.println("Iniciando streams para " + cameras.size() + " câmeras cadastradas...");
+
         for (Camera cam : cameras) {
             startStream(String.valueOf(cam.getId()), cam.getAcesso());
         }
     }
 
     public void startStream(String cameraId, String rtspUrl) {
-        if (activeProcesses.containsKey(cameraId) && activeProcesses.get(cameraId).isAlive()) {
-            return;
+        String outputDir = "/tmp/orizon-hls/" + cameraId;
+        File dir = new File(outputDir);
+
+        // Limpa a pasta individual da câmera caso já exista
+        if (dir.exists()) {
+            for (File file : dir.listFiles()) {
+                file.delete();
+            }
+        } else {
+            dir.mkdirs();
         }
 
-        File camDir = new File(baseDir + cameraId);
-        if (!camDir.exists()) camDir.mkdirs();
+        System.out.println("-> Subindo FFmpeg Cam ID [" + cameraId + "] com a URL: " + rtspUrl);
 
         ProcessBuilder pb = new ProcessBuilder(
                 "ffmpeg",
                 "-rtsp_transport", "tcp",
                 "-i", rtspUrl,
+                "-vf", "fps=25,format=yuv420p",    // <--- Normaliza FPS e força o formato de pixel padronizado (yuv420p)
                 "-c:v", "libx264",
                 "-preset", "ultrafast",
                 "-tune", "zerolatency",
                 "-hls_time", "2",
                 "-hls_list_size", "3",
                 "-hls_flags", "delete_segments",
-                camDir.getAbsolutePath() + "/stream.m3u8"
+                outputDir + "/stream.m3u8"
         );
 
         try {

@@ -40,4 +40,6 @@ public class CameraService {
         Camera camera = buscarPorId(id);
         cameraRepository.delete(camera);
     }
+
+
 }

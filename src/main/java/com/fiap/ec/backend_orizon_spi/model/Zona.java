@@ -12,6 +12,7 @@ public class Zona {
     private Long id_zona;
     @Column(nullable = false)
     private String nome;
+    private Resolucao resolucao;
     @ElementCollection
     private List<Ponto> poligonos;
     @ManyToOne
@@ -26,8 +27,9 @@ public class Zona {
     public Zona() {
     }
 
-    public Zona(String nome, List<Ponto> poligonos, Camera camera, Maquina maquina, List<ZonaEpi> epi) {
+    public Zona(String nome, Resolucao resolucao, List<Ponto> poligonos, Camera camera, Maquina maquina, List<ZonaEpi> epi) {
         this.nome = nome;
+        this.resolucao = resolucao;
         this.poligonos = poligonos;
         this.camera = camera;
         this.maquina = maquina;
@@ -44,6 +46,14 @@ public class Zona {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public Resolucao getResolucao() {
+        return resolucao;
+    }
+
+    public void setResolucao(Resolucao resolucao) {
+        this.resolucao = resolucao;
     }
 
     public Camera getCamera() {

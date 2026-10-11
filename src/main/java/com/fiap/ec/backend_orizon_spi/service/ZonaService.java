@@ -71,7 +71,11 @@ public class ZonaService {
 
     public Zona buscarPorId(Long id){
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ocorrência não encontrada"));
+                .orElseThrow(() -> new RuntimeException("Zona não encontrada"));
+    }
+
+    public List<Zona> buscarPorIdCamera(Long id){
+        return repository.zonaPorCamera(id);
     }
 
     public Zona atualizar(Long id, Zona zonaAtualizada){

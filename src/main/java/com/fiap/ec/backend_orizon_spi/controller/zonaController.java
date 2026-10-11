@@ -26,6 +26,11 @@ public class zonaController {
         return service.listar();
     }
 
+    @GetMapping("camera/{id}")
+    public List<Zona> buscarPorIdCamera(@PathVariable Long id){
+        return service.buscarPorIdCamera(id);
+    }
+
     @GetMapping("{id}")
     public Zona buscarPorId(@PathVariable Long id){
         return service.buscarPorId(id);

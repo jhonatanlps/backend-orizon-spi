@@ -28,7 +28,7 @@ Organiza os Equipamentos de Proteção Individual cadastrados no sistema, possib
 
 ### Gerenciamento de zonas de risco
 
-Permite cadastrar zonas relacionadas às máquinas e configurar seus polígonos de delimitação, além de relacionar os EPIs aplicáveis a cada zona.
+Permite cadastrar zonas vinculadas às máquinas e configurar seus polígonos de delimitação, além de relacionar os EPIs aplicáveis a cada zona.
 
 ### Gerenciamento de ocorrências
 
